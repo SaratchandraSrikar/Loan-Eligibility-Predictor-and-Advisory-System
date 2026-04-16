@@ -1,0 +1,412 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section
+  class="grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.2fr)] gap-6 lg:gap-8 items-start"
+>
+  <!-- Left: Input Form -->
+  <div
+    class="relative rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm overflow-hidden"
+  >
+    <div class="absolute -top-32 -right-40 h-72 w-72 bg-sky-200/60 rounded-full blur-3xl"></div>
+
+    <div class="relative">
+      <h2 class="text-lg sm:text-xl font-semibold mb-1 flex items-center gap-2">
+        <span
+          class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-sky-500/15 text-sky-700 border border-sky-500/30"
+        >
+          <i class="fa-solid fa-sliders"></i>
+        </span>
+        Applicant Profile
+      </h2>
+      <p class="text-xs sm:text-sm text-slate-600/80 mb-4">
+        Enter core financial details to evaluate loan eligibility, affordability, and risk in
+        seconds.
+      </p>
+    </div>
+
+    <form id="loan-form" class="relative space-y-4 text-sm">
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label class="form-label">Number of Dependents</label>
+          <input
+            type="number"
+            name="dependents"
+            min="0"
+            max="10"
+            step="1"
+            class="form-input"
+            placeholder="e.g. 2"
+            value="{{ last_run.dependents|int if last_run and last_run.dependents is not none else '' }}"
+          />
+        </div>
+        <div>
+          <label class="form-label">Education</label>
+          <select name="education" class="form-input">
+            <option value="Graduate" {% if last_run and last_run.education == 'Graduate' %}selected{% endif %}>Graduate</option>
+            <option value="Not Graduate" {% if last_run and last_run.education == 'Not Graduate' %}selected{% endif %}>Not Graduate</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Self Employed</label>
+          <select name="self_employed" class="form-input">
+            <option value="No" {% if last_run and last_run.self_employed == 'No' %}selected{% endif %}>No</option>
+            <option value="Yes" {% if last_run and last_run.self_employed == 'Yes' %}selected{% endif %}>Yes</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Annual Income</label>
+          <div class="relative">
+            <span class="input-prefix">₹</span>
+            <input
+              type="number"
+              name="income"
+              min="0"
+              max="12000000"
+              step="1000"
+              class="form-input pl-8"
+              placeholder="e.g. 1000000"
+              value="{{ last_run.income|int if last_run and last_run.income is not none else '' }}"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-3 gap-4">
+        <div>
+          <label class="form-label">Loan Amount</label>
+          <div class="relative">
+            <span class="input-prefix">₹</span>
+            <input
+              type="number"
+              name="loan_amount"
+              min="0"
+              max="50000000"
+              step="10000"
+              class="form-input pl-8"
+              placeholder="e.g. 500000"
+              value="{{ last_run.loan_amount|int if last_run and last_run.loan_amount is not none else '' }}"
+            />
+          </div>
+        </div>
+        <div>
+          <label class="form-label">Loan Term (Years)</label>
+          <input
+            type="number"
+            name="loan_term"
+            min="1"
+            max="40"
+            step="1"
+            class="form-input"
+            placeholder="e.g. 5"
+            value="{{ last_run.loan_term|int if last_run and last_run.loan_term is not none else '' }}"
+          />
+        </div>
+        <div>
+          <label class="form-label">CIBIL Score</label>
+          <input
+            type="number"
+            name="cibil"
+            min="300"
+            max="900"
+            step="1"
+            class="form-input"
+            placeholder="e.g. 750"
+            value="{{ last_run.cibil|int if last_run and last_run.cibil is not none else '' }}"
+          />
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label class="form-label">Residential Assets Value</label>
+          <div class="relative">
+            <span class="input-prefix">₹</span>
+            <input
+              type="number"
+              name="res_assets"
+              min="0"
+              max="100000000"
+              step="1000"
+              class="form-input pl-8"
+              placeholder="e.g. 1500000"
+              value="{{ last_run.res_assets|int if last_run and last_run.res_assets is not none else '' }}"
+            />
+          </div>
+        </div>
+        <div>
+          <label class="form-label">Commercial Assets Value</label>
+          <div class="relative">
+            <span class="input-prefix">₹</span>
+            <input
+              type="number"
+              name="com_assets"
+              min="0"
+              max="100000000"
+              step="1000"
+              class="form-input pl-8"
+              placeholder="e.g. 0"
+              value="{{ last_run.com_assets|int if last_run and last_run.com_assets is not none else '' }}"
+            />
+          </div>
+        </div>
+        <div>
+          <label class="form-label">Luxury Assets Value</label>
+          <div class="relative">
+            <span class="input-prefix">₹</span>
+            <input
+              type="number"
+              name="lux_assets"
+              min="0"
+              max="100000000"
+              step="1000"
+              class="form-input pl-8"
+              placeholder="e.g. 200000"
+              value="{{ last_run.lux_assets|int if last_run and last_run.lux_assets is not none else '' }}"
+            />
+          </div>
+        </div>
+        <div>
+          <label class="form-label">Bank Assets Value</label>
+          <div class="relative">
+            <span class="input-prefix">₹</span>
+            <input
+              type="number"
+              name="bank_assets"
+              min="0"
+              max="100000000"
+              step="1000"
+              class="form-input pl-8"
+              placeholder="e.g. 300000"
+              value="{{ last_run.bank_assets|int if last_run and last_run.bank_assets is not none else '' }}"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-3 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p class="text-xs text-slate-600/80 max-w-xs">
+          Your data stays in this browser‑session and is used only for on‑demand risk simulation.
+        </p>
+        <div class="flex items-center gap-2">
+          {% if not last_run %}
+          <button
+            type="button"
+            id="generate-random"
+            class="inline-flex items-center gap-1.5 rounded-2xl border border-sky-400/60 bg-white/70 px-3 py-2 text-xs font-medium text-sky-700 hover:border-sky-500 hover:text-sky-800 transition-all duration-200"
+          >
+            <i class="fa-solid fa-wand-magic-sparkles text-sky-600"></i>
+            Generate Profile
+          </button>
+          {% endif %}
+          <button
+            type="submit"
+            class="relative inline-flex items-center gap-2 rounded-2xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 hover:bg-blue-700 hover:shadow-blue-600/30 transition-all duration-300 hover:-translate-y-0.5"
+          >
+            <span class="hidden sm:inline">Run Eligibility Check</span>
+            <span class="sm:hidden">Check</span>
+            <span id="submit-spinner" class="hidden">
+              <i class="fa-solid fa-circle-notch fa-spin"></i>
+            </span>
+            <span id="submit-icon">
+              <i class="fa-solid fa-arrow-trend-up"></i>
+            </span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Right: Results Dashboard -->
+  <div class="space-y-4 lg:space-y-5">
+    <!-- Eligibility + Risk -->
+    <div
+      class="rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm"
+    >
+      <div class="flex items-start justify-between gap-4 mb-4">
+        <div>
+          <p class="text-xs uppercase tracking-[0.28em] text-sky-600/80 mb-1">
+            Decision Overview
+          </p>
+          <h2 class="text-lg sm:text-xl font-semibold">Loan Eligibility Snapshot</h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <a
+            id="export-report-btn"
+            href="/api/export-report/latest"
+            class="hidden px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-slate-900 text-white hover:bg-slate-800 transition-all shadow-sm shadow-slate-900/10 flex items-center gap-1.5"
+          >
+            <i class="fa-solid fa-file-pdf text-red-500"></i> Export PDF
+          </a>
+          <div
+            id="eligibility-pill"
+            class="px-3 py-1 rounded-full text-xs font-semibold border border-sky-200/80 text-sky-700 bg-white/80"
+          >
+            Awaiting Input
+          </div>
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-3 gap-4 mb-4">
+        <div class="metric-card" data-animate="true">
+          <p class="metric-label">Eligibility</p>
+          <p id="loan_status" class="metric-value text-slate-700">—</p>
+          <p class="metric-subtext">AI decision (Yes / No)</p>
+        </div>
+        <div class="metric-card" data-animate="true">
+          <p class="metric-label">Risk Category</p>
+          <p id="risk_category" class="metric-value">—</p>
+          <p class="metric-subtext">Aligned with bank‑style risk grading</p>
+        </div>
+        <div class="metric-card" data-animate="true">
+          <p class="metric-label">Recommended Loan Type</p>
+          <p id="loan_type" class="metric-value">—</p>
+          <p class="metric-subtext">Best‑fit product suggestion</p>
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] gap-4 items-center">
+        <div>
+          <p class="text-xs font-medium text-slate-700 mb-1">Applicant Affordability Index</p>
+          <div class="w-full h-2 rounded-full bg-sky-100/80 overflow-hidden">
+            <div
+              id="aai-bar"
+              class="h-full w-0 bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-500 transition-[width] duration-700 ease-out"
+            ></div>
+          </div>
+          <div class="flex justify-between text-xs text-slate-500 mt-1">
+            <span>0</span>
+            <span>50</span>
+            <span>100</span>
+          </div>
+          <p id="aai_value" class="mt-2 text-sm text-slate-700">
+            AAI: <span class="font-semibold">—</span>
+          </p>
+        </div>
+
+        <div class="space-y-1 text-xs">
+          <p id="cibil_category" class="text-slate-700">
+            CIBIL Health: <span class="font-semibold">—</span>
+          </p>
+          <p class="text-slate-600/90">
+            DTI:
+            <span id="dti_value" class="font-semibold text-sky-700">—</span>
+            &nbsp;&bull;&nbsp; LTI:
+            <span id="lti_value" class="font-semibold text-cyan-700">—</span>
+          </p>
+          <p class="text-slate-600/90">
+            Max Eligible Loan:
+            <span id="max_eligible_loan" class="font-semibold text-sky-700">—</span>
+          </p>
+          <p class="text-[11px] text-slate-500/90">
+            Lower DTI &amp; LTI, higher AAI and CIBIL typically indicate stronger repayment capacity.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMI & Bank Comparison -->
+    <div
+      class="rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm"
+    >
+      <div class="flex items-start justify-between gap-4 mb-4">
+        <div>
+          <p class="text-xs uppercase tracking-[0.28em] text-sky-600/80 mb-1">
+            Repayment Insights
+          </p>
+          <h2 class="text-lg sm:text-xl font-semibold">EMI &amp; Multi‑Bank Comparison</h2>
+        </div>
+        <div class="text-right text-xs text-slate-600/80">
+          <p>
+            Interest Rate:
+            <span id="interest_rate" class="font-semibold text-sky-700">—</span>
+          </p>
+          <p>
+            EMI (per month):
+            <span id="emi" class="font-semibold text-cyan-700">—</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] gap-4 items-center">
+        <div class="flex flex-col gap-2">
+          <div class="h-56">
+            <canvas id="emiChart"></canvas>
+          </div>
+          <div class="flex flex-wrap items-center justify-center gap-3 text-[10px] text-slate-500 mt-1">
+            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span> Your Profile</span>
+            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-green-600"></span> High Prob</span>
+            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Med Prob</span>
+            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-red-600"></span> Low Prob</span>
+          </div>
+        </div>
+
+        <div class="space-y-2 text-xs">
+          <p class="text-slate-700 font-medium">Dynamic Risk Pricing</p>
+          <p class="text-slate-600/90">
+            Interest rates adapt automatically based on your CIBIL score and the recommended loan product.
+            The chart compares your AI-estimated rate against top real-world banks.
+          </p>
+          <div
+            class="mt-2 rounded-2xl border border-sky-500/20 bg-sky-400/5 px-3 py-2 text-[11px] text-sky-700"
+          >
+            <p class="font-semibold mb-0.5 flex items-center gap-1.5">
+              <i class="fa-solid fa-lightbulb text-sky-600"></i>
+              Insight
+            </p>
+            <p>
+              Banks colored <span class="font-semibold text-green-700">Green</span> indicate a high probability of approval based on your Debt-to-Income ratio, whereas <span class="font-semibold text-red-600">Red</span> denotes stricter lending criteria.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Advisory & SHAP Reasons -->
+    <div class="grid lg:grid-cols-2 gap-4">
+      <div
+        class="rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm"
+      >
+        <h3 class="text-sm font-semibold mb-2 flex items-center gap-2">
+          <span
+            class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-cyan-400/15 text-cyan-700 border border-cyan-500/30"
+          >
+            <i class="fa-solid fa-compass"></i>
+          </span>
+          Actionable Advisory
+        </h3>
+        <p class="text-xs text-slate-600/80 mb-3">
+          Tailored guidance generated from your specific profile, combining affordability metrics
+          and risk drivers.
+        </p>
+        <ul id="advisory_list" class="space-y-1.5 text-xs text-slate-700">
+          <li class="text-slate-500/80">Run a simulation above to see recommendations.</li>
+        </ul>
+      </div>
+
+      <div
+        class="rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm"
+      >
+        <h3 class="text-sm font-semibold mb-2 flex items-center gap-2">
+          <span
+            class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-sky-400/15 text-sky-700 border border-sky-500/30"
+          >
+            <i class="fa-solid fa-brain"></i>
+          </span>
+          Explainable AI (Top SHAP Drivers)
+        </h3>
+        <p class="text-xs text-slate-600/80 mb-3">
+          The most influential features behind this decision, using SHAP‑based model explainability.
+        </p>
+        <ul id="reasons_list" class="space-y-1.5 text-xs text-slate-700">
+          <li class="text-slate-500/80">
+            Once you submit details, we surface the top three drivers supporting or hurting your
+            approval.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+

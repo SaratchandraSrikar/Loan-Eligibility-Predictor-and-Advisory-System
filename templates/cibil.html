@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.2fr)] gap-6 lg:gap-8 items-start">
+  <div
+    class="relative rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm overflow-hidden"
+  >
+    <div class="absolute -top-24 -right-32 h-56 w-56 bg-sky-200/60 rounded-full blur-3xl"></div>
+
+    <div class="relative space-y-3">
+      <div>
+        <p class="text-xs uppercase tracking-[0.28em] text-sky-600/80 mb-1">
+          CIBIL score studio
+        </p>
+        <h2 class="text-lg sm:text-xl font-semibold">Estimate &amp; improve your CIBIL</h2>
+        <p class="text-xs sm:text-sm text-slate-600/85">
+          Simulate how on‑time payments, utilisation, history length, and inquiries affect an
+          approximate CIBIL score before you apply for a loan.
+        </p>
+      </div>
+
+      <form id="cibil-form" class="space-y-6">
+        
+        <!-- Section 1: Personal Profile -->
+        <fieldset class="p-4 rounded-xl border border-slate-200/60 bg-slate-50/50">
+          <legend class="text-xs font-semibold uppercase tracking-wider text-sky-700 px-2">1. Personal Profile</legend>
+          <div class="grid sm:grid-cols-3 gap-4 mt-2">
+            <div>
+              <label class="form-label">Age</label>
+              <input type="number" name="age" min="18" max="70" class="form-input text-xs" required value="{{ last_run.age|int if last_run and last_run.age is not none else '30' }}" />
+            </div>
+            <div>
+              <label class="form-label">Employment Type</label>
+              <select name="employment" class="form-input text-xs bg-white" required>
+                <option value="Salaried" {% if last_run and last_run.employment == 'Salaried' %}selected{% endif %}>Salaried</option>
+                <option value="Self-employed" {% if last_run and last_run.employment == 'Self-employed' %}selected{% endif %}>Self-employed</option>
+                <option value="Student" {% if last_run and last_run.employment == 'Student' %}selected{% endif %}>Student</option>
+                <option value="Unemployed" {% if last_run and last_run.employment == 'Unemployed' %}selected{% endif %}>Unemployed</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Work Experience (Years)</label>
+              <input type="number" name="experience" min="0" max="40" class="form-input text-xs" required value="{{ last_run.experience|int if last_run and last_run.experience is not none else '5' }}" />
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Section 2: Income & Financial Capacity -->
+        <fieldset class="p-4 rounded-xl border border-slate-200/60 bg-slate-50/50">
+          <legend class="text-xs font-semibold uppercase tracking-wider text-sky-700 px-2">2. Financial Capacity</legend>
+          <div class="grid sm:grid-cols-3 gap-4 mt-2">
+            <div>
+              <label class="form-label">Monthly Income (₹)</label>
+              <input type="number" name="income" min="0" max="1000000" class="form-input text-xs" required value="{{ last_run.income|int if last_run and last_run.income is not none else '50000' }}" />
+            </div>
+            <div>
+              <label class="form-label">Monthly Expenses (₹)</label>
+              <input type="number" name="expenses" min="0" max="1000000" class="form-input text-xs" required value="{{ last_run.expenses|int if last_run and last_run.expenses is not none else '30000' }}" />
+            </div>
+            <div>
+              <label class="form-label">Total Existing EMI (₹)</label>
+              <input type="number" name="emi" min="0" max="500000" class="form-input text-xs" required value="{{ last_run.emi|int if last_run and last_run.emi is not none else '10000' }}" />
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Section 3: Loan Details -->
+        <fieldset class="p-4 rounded-xl border border-slate-200/60 bg-slate-50/50">
+          <legend class="text-xs font-semibold uppercase tracking-wider text-sky-700 px-2">3. Loan Details</legend>
+          <div class="grid sm:grid-cols-2 gap-4 mt-2 mb-4">
+            <div>
+              <label class="form-label">Active Loans</label>
+              <input type="number" name="active_loans" min="0" max="20" class="form-input text-xs" required value="{{ last_run.active_loans|int if last_run and last_run.active_loans is not none else '1' }}" />
+            </div>
+            <div>
+              <label class="form-label">Total Outstanding Amount (₹)</label>
+              <input type="number" name="outstanding_loan" min="0" max="50000000" class="form-input text-xs" required value="{{ last_run.outstanding_loan|int if last_run and last_run.outstanding_loan is not none else '500000' }}" />
+            </div>
+          </div>
+          <p class="text-[11px] font-medium text-slate-500 mb-2">Loan Mix (Count of each type)</p>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div>
+              <label class="form-label text-[10px]">Home</label>
+              <input type="number" name="home_loans" min="0" max="5" class="form-input text-xs py-1.5" required value="{{ last_run.home_loans|int if last_run and last_run.home_loans is not none else '0' }}" />
+            </div>
+            <div>
+              <label class="form-label text-[10px]">Car</label>
+              <input type="number" name="car_loans" min="0" max="5" class="form-input text-xs py-1.5" required value="{{ last_run.car_loans|int if last_run and last_run.car_loans is not none else '1' }}" />
+            </div>
+            <div>
+              <label class="form-label text-[10px]">Personal</label>
+              <input type="number" name="personal_loans" min="0" max="10" class="form-input text-xs py-1.5" required value="{{ last_run.personal_loans|int if last_run and last_run.personal_loans is not none else '0' }}" />
+            </div>
+            <div>
+              <label class="form-label text-[10px]">Education</label>
+              <input type="number" name="education_loans" min="0" max="5" class="form-input text-xs py-1.5" required value="{{ last_run.education_loans|int if last_run and last_run.education_loans is not none else '0' }}" />
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Section 4 & 6: Credit Cards & History -->
+        <div class="grid sm:grid-cols-2 gap-6">
+          <fieldset class="p-4 rounded-xl border border-slate-200/60 bg-slate-50/50">
+            <legend class="text-xs font-semibold uppercase tracking-wider text-sky-700 px-2">4. Credit Cards</legend>
+            <div class="space-y-3 mt-2">
+              <div>
+                <label class="form-label">Number of Cards</label>
+                <input type="number" name="credit_cards" min="0" max="10" class="form-input text-xs" required value="{{ last_run.credit_cards|int if last_run and last_run.credit_cards is not none else '2' }}" />
+              </div>
+              <div>
+                <label class="form-label">Total Limit (₹)</label>
+                <input type="number" name="cc_limit" min="0" max="5000000" class="form-input text-xs" required value="{{ last_run.cc_limit|int if last_run and last_run.cc_limit is not none else '200000' }}" />
+              </div>
+              <div>
+                <label class="form-label">Current Used (₹)</label>
+                <input type="number" name="cc_used" min="0" max="5000000" class="form-input text-xs" required value="{{ last_run.cc_used|int if last_run and last_run.cc_used is not none else '60000' }}" />
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="p-4 rounded-xl border border-slate-200/60 bg-slate-50/50">
+            <legend class="text-xs font-semibold uppercase tracking-wider text-sky-700 px-2">6. Credit History</legend>
+            <div class="space-y-3 mt-2">
+              <div>
+                <label class="form-label">Oldest Account Age (Years)</label>
+                <input type="number" name="history_years" min="0" max="30" class="form-input text-xs" required value="{{ last_run.history_years|int if last_run and last_run.history_years is not none else '4' }}" />
+              </div>
+              <div>
+                <label class="form-label">Number of Closed Loans</label>
+                <input type="number" name="closed_loans" min="0" max="50" class="form-input text-xs" required value="{{ last_run.closed_loans|int if last_run and last_run.closed_loans is not none else '1' }}" />
+              </div>
+              <div>
+                <label class="form-label">Credit Inquiries (Last 12m)</label>
+                <input type="number" name="inquiries" min="0" max="20" class="form-input text-xs" required value="{{ last_run.inquiries|int if last_run and last_run.inquiries is not none else '1' }}" />
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- Section 5: Repayment History -->
+        <fieldset class="p-4 rounded-xl border border-rose-200/60 bg-rose-50/30">
+          <legend class="text-xs font-semibold uppercase tracking-wider text-rose-700 px-2">5. Repayment Defaults (Critical)</legend>
+          <div class="grid sm:grid-cols-2 gap-4 mt-2">
+            <div>
+              <label class="form-label">Missed Payments (Count)</label>
+              <input type="number" name="missed_payments" min="0" max="50" class="form-input text-xs" required value="{{ last_run.missed_payments|int if last_run and last_run.missed_payments is not none else '0' }}" />
+            </div>
+            <div>
+              <label class="form-label">Max Payment Delay</label>
+              <select name="max_delay" class="form-input text-xs bg-white" required>
+                <option value="No Delay" {% if last_run and last_run.max_delay == 'No Delay' %}selected{% endif %}>No Delay</option>
+                <option value="30 Days" {% if last_run and last_run.max_delay == '30 Days' %}selected{% endif %}>30 Days</option>
+                <option value="60 Days" {% if last_run and last_run.max_delay == '60 Days' %}selected{% endif %}>60 Days</option>
+                <option value="90+ Days" {% if last_run and last_run.max_delay == '90+ Days' %}selected{% endif %}>90+ Days</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Loan Default History</label>
+              <select name="default_history" class="form-input text-xs bg-white" required>
+                <option value="No" {% if last_run and last_run.default_history == 'No' %}selected{% endif %}>No</option>
+                <option value="Yes" {% if last_run and last_run.default_history == 'Yes' %}selected{% endif %}>Yes</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Settled Loans</label>
+              <select name="settled_loans" class="form-input text-xs bg-white" required>
+                <option value="No" {% if last_run and last_run.settled_loans == 'No' %}selected{% endif %}>No</option>
+                <option value="Yes" {% if last_run and last_run.settled_loans == 'Yes' %}selected{% endif %}>Yes</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="flex items-center justify-end gap-3 pt-2">
+          <button
+            type="submit"
+            id="submit-cibil"
+            class="inline-flex items-center gap-2 rounded-2xl border border-transparent bg-blue-600 px-5 py-2.5 text-xs font-semibold text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-all shadow-sm"
+          >
+            <i class="fa-solid fa-gauge-high" id="cibil-btn-icon"></i>
+            <i class="fa-solid fa-circle-notch fa-spin hidden" id="cibil-btn-spinner"></i>
+            Calculate Score
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="rounded-3xl border border-slate-200 bg-white shadow-sm flex flex-col overflow-hidden">
+    <div class="p-5 sm:p-6 border-b border-slate-100 bg-slate-50/50">
+      <div class="flex items-center justify-between gap-4">
+        <div>
+          <p class="text-xs uppercase tracking-[0.28em] text-sky-600/80 mb-1">Result overview</p>
+          <h3 class="text-base font-semibold">Estimated CIBIL Snapshot</h3>
+        </div>
+        <div id="cibil_band_pill" class="px-3 py-1 rounded-full text-xs font-semibold border border-slate-200 text-slate-500 bg-white">
+          Awaiting
+        </div>
+      </div>
+
+      <div class="mt-6 mb-2">
+        <div class="w-full h-3 rounded-full bg-slate-100 overflow-hidden relative">
+          <div id="cibil-score-bar" class="absolute left-0 top-0 h-full w-0 bg-gradient-to-r from-red-400 via-amber-400 to-emerald-500 transition-[width] duration-1000 ease-out origin-left"></div>
+        </div>
+        <div class="flex justify-between text-[10px] text-slate-400 mt-1.5 px-0.5 font-medium">
+          <span>300</span>
+          <span>600</span>
+          <span>750</span>
+          <span>900</span>
+        </div>
+        <p id="cibil_calc_result" class="mt-3 text-[15px] font-medium text-slate-700 text-center">
+          Score: <span class="font-bold text-slate-400">—</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Insights & Factors -->
+    <div class="p-5 sm:p-6 grid sm:grid-cols-2 gap-6 bg-white flex-1">
+      <div>
+        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wide mb-3 flex items-center gap-1.5">
+          <i class="fa-solid fa-chart-pie text-sky-500"></i> Key Factors
+        </h4>
+        <ul id="cibil-factors-list" class="space-y-2.5 text-xs text-slate-600/90">
+          <li class="italic text-slate-400">Submit the form to see which factors are impacting your score.</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wide mb-3 flex items-center gap-1.5">
+          <i class="fa-solid fa-lightbulb text-amber-500"></i> Actionable Tips
+        </h4>
+        <ul id="cibil-tips-list" class="space-y-2.5 text-xs text-slate-600/90">
+          <li class="italic text-slate-400">Suggestions on how to improve your score will appear here.</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="bg-amber-50 px-5 py-3 border-t border-amber-100/50">
+      <p class="text-[10px] text-amber-700/80 text-center uppercase tracking-wider font-medium">
+        Educational approximation only • Not an official credit score
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}

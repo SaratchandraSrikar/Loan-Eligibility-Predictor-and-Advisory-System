@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="max-w-4xl mx-auto space-y-6">
+  <div
+    class="rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm"
+  >
+    <p class="text-xs uppercase tracking-[0.28em] text-sky-600/80 mb-2">About this project</p>
+    <h2 class="text-xl sm:text-2xl font-semibold mb-3">Loan Eligibility &amp; Advisory System</h2>
+    <p class="text-sm sm:text-base text-slate-700/90">
+      This web application is a single, modern interface that demonstrates how banks and financial
+      institutions think about loan applications — enriched with explainable AI and clear
+      visualisation. It is built on top of a trained loan prediction model and exposes the main
+      decision drivers in a way that applicants can actually understand.
+    </p>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-4">
+    <div
+      class="rounded-3xl border border-sky-300/30 bg-sky-500/5 backdrop-blur p-5 text-xs text-slate-700/90 space-y-2"
+    >
+      <h3 class="text-sm font-semibold mb-1 flex items-center gap-2">
+        <span
+          class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-sky-500/15 text-sky-700 border border-sky-500/30"
+        >
+          <i class="fa-solid fa-layer-group"></i>
+        </span>
+        What the system calculates
+      </h3>
+      <ul class="space-y-1.5">
+        <li>
+          <span class="text-sky-600 mr-1">•</span>
+          Loan eligibility (Yes / No) using the trained model.
+        </li>
+        <li>
+          <span class="text-sky-600 mr-1">•</span>
+          Recommended loan type based on income, loan size, assets, education, and CIBIL.
+        </li>
+        <li>
+          <span class="text-sky-600 mr-1">•</span>
+          EMI using the standard banking formula, plus DTI, LTI, and Applicant Affordability Index.
+        </li>
+        <li>
+          <span class="text-sky-600 mr-1">•</span>
+          Maximum safe loan amount and a risk category from Very Safe to Very Risky.
+        </li>
+        <li>
+          <span class="text-sky-600 mr-1">•</span>
+          Multi‑bank EMI comparison at fixed benchmark rates for quick decisioning.
+        </li>
+      </ul>
+    </div>
+
+    <div
+      class="rounded-3xl border border-cyan-300/30 bg-cyan-500/5 backdrop-blur p-5 text-xs text-slate-700/90 space-y-2"
+    >
+      <h3 class="text-sm font-semibold mb-1 flex items-center gap-2">
+        <span
+          class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-cyan-500/15 text-cyan-700 border border-cyan-500/30"
+        >
+          <i class="fa-solid fa-microscope"></i>
+        </span>
+        Explainable AI &amp; SHAP
+      </h3>
+      <p>
+        Under the hood, the model uses SHAP (SHapley Additive exPlanations) to reveal which input
+        features most strongly influenced the decision. Instead of showing a full technical plot, we
+        surface a concise list of the top three drivers — clearly marking which ones supported
+        approval and which ones contributed to rejection.
+      </p>
+      <p>
+        This bridges the gap between complex machine learning models and the transparent, auditable
+        explanations that regulators and customers increasingly expect.
+      </p>
+    </div>
+  </div>
+
+  <div
+    class="rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 text-xs text-slate-700/90 space-y-2 shadow-sm"
+  >
+    <h3 class="text-sm font-semibold mb-1">How to use this tool effectively</h3>
+    <ul class="space-y-1.5">
+      <li>
+        <span class="text-sky-600 mr-1">1.</span>
+        Go to the <span class="font-semibold">Loan Analyzer</span> page.
+      </li>
+      <li>
+        <span class="text-sky-600 mr-1">2.</span>
+        Either enter your details manually, or use the
+        <span class="font-semibold">Generate Profile</span> button to simulate realistic scenarios.
+      </li>
+      <li>
+        <span class="text-sky-600 mr-1">3.</span>
+        Review the eligibility outcome, affordability metrics, risk category, and SHAP explanations.
+      </li>
+      <li>
+        <span class="text-sky-600 mr-1">4.</span>
+        Experiment with different combinations to see how income, CIBIL, and assets impact approval.
+      </li>
+    </ul>
+    <p class="text-[11px] text-slate-500/90 mt-1">
+      Note: This prototype is meant for academic, demonstration, or early advisory use. Final
+      credit decisions always depend on the detailed policies and documentation checks of each
+      lending institution.
+    </p>
+  </div>
+</section>
+{% endblock %}
+

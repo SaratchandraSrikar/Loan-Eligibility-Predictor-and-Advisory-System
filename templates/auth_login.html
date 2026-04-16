@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="max-w-md mx-auto">
+  <div
+    class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"
+  >
+    <h2 class="text-xl font-semibold mb-1">Log in</h2>
+    <p class="text-xs text-slate-600/90 mb-4">
+      Access your saved loan simulations and personalised analytics.
+    </p>
+
+    <form method="post" class="space-y-4 text-sm">
+      <div>
+        <label class="form-label">Email</label>
+        <input
+          type="email"
+          name="email"
+          required
+          class="form-input"
+          placeholder="you@example.com"
+        />
+      </div>
+      <div>
+        <label class="form-label">Password</label>
+        <input
+          type="password"
+          name="password"
+          required
+          class="form-input"
+          placeholder="••••••••"
+        />
+      </div>
+      <button
+        type="submit"
+        class="w-full inline-flex justify-center items-center gap-2 rounded-2xl bg-gradient-to-r from-sky-400 to-cyan-300 px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-sky-500/20 hover:shadow-cyan-500/20 transition-all duration-300 hover:-translate-y-0.5"
+      >
+        Log in
+      </button>
+    </form>
+
+    <p class="mt-4 text-xs text-slate-600/90">
+      New here?
+      <a href="{{ url_for('register') }}" class="text-sky-600 hover:text-sky-700">
+        Create an account
+      </a>
+    </p>
+  </div>
+</section>
+{% endblock %}
+

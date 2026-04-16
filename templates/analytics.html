@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="space-y-5">
+  <div
+    class="rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm"
+  >
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <p class="text-xs uppercase tracking-[0.28em] text-sky-600/80 mb-1">
+          Personal analytics
+        </p>
+        <h2 class="text-lg sm:text-xl font-semibold">Your loan &amp; CIBIL journey</h2>
+        <p class="text-xs sm:text-sm text-slate-600/85">
+          A visual summary of your past simulations — how your CIBIL, affordability, and risk bands
+          have evolved across different profiles.
+        </p>
+      </div>
+      <div class="text-right text-xs text-slate-600/85 space-y-0.5">
+        <p>
+          Total simulations:
+          <span class="font-semibold text-sky-600">{{ analytics.summary.total_runs }}</span>
+        </p>
+        <p>
+          Average CIBIL:
+          <span class="font-semibold text-sky-600">{{ analytics.summary.avg_cibil }}</span>
+        </p>
+        <p>
+          Average AAI:
+          <span class="font-semibold text-sky-600">{{ analytics.summary.avg_aai }}</span>
+        </p>
+        <p>
+          Most common risk:
+          <span class="font-semibold text-sky-600">{{ analytics.summary.top_risk }}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  {% if analytics.affordability %}
+  <div class="rounded-3xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm mb-4">
+    <div class="flex flex-col lg:flex-row gap-6 items-start">
+        <!-- Chart Section -->
+        <div class="flex-1 w-full">
+            <h3 class="text-base font-semibold text-slate-800 mb-1">Income vs EMI Capacity (Affordability)</h3>
+            <p class="text-[11px] text-slate-500 mb-4">"Can I realistically afford this loan?"</p>
+            <div class="h-64">
+                <canvas id="affordabilityChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Logic Engine Side Panel -->
+        <div class="lg:w-1/3 w-full bg-slate-50 rounded-2xl p-4 sm:p-5 border border-slate-100/80 shadow-inner">
+            <h4 class="text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-2"><i class="fa-solid fa-microchip"></i> Engine Interpretation</h4>
+            <div class="mb-4">
+                {% set color_map = {'green': 'text-green-700 bg-green-100/50', 'amber': 'text-amber-700 bg-amber-100/50', 'red': 'text-red-700 bg-red-100/50'} %}
+                {% set status_class = color_map.get(analytics.affordability.status_color, 'text-slate-700 bg-slate-100/50') %}
+                
+                <p class="text-xs font-semibold px-2.5 py-1.5 rounded-md leading-relaxed border border-white {{ status_class }}">
+                  {{ analytics.affordability.interpretation }}
+                </p>
+                
+                {% if analytics.affordability.gap_insight %}
+                <p class="text-[11px] font-bold text-red-600 mt-2.5 flex items-center gap-1.5">
+                  <i class="fa-solid fa-triangle-exclamation"></i> {{ analytics.affordability.gap_insight }}
+                </p>
+                {% endif %}
+            </div>
+            
+            {% if analytics.affordability.adjustments %}
+            <h4 class="text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-2"><i class="fa-solid fa-sliders"></i> Adjustment Suggestions</h4>
+            <ul class="space-y-1.5 text-xs text-slate-700">
+                {% for adj in analytics.affordability.adjustments %}
+                <li class="flex items-start gap-1.5">
+                  <i class="fa-solid fa-arrow-right text-sky-500 mt-0.5 text-[10px]"></i>
+                  <span>{{ adj }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <div class="h-px w-full bg-slate-200/50 my-3"></div>
+            <p class="text-xs text-slate-400 italic">No structural adjustments needed.</p>
+            {% endif %}
+        </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="grid lg:grid-cols-2 gap-4">
+    <div
+      class="rounded-3xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm"
+    >
+      <h3 class="text-sm font-semibold mb-2">CIBIL &amp; AAI over time</h3>
+      <p class="text-[11px] text-slate-600/85 mb-3">
+        Tracks how your simulated CIBIL score and Applicant Affordability Index change across
+        different loan profiles.
+      </p>
+      <div class="h-56">
+        <canvas id="cibilAaiChart"></canvas>
+      </div>
+    </div>
+
+    <div
+      class="rounded-3xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm"
+    >
+      <h3 class="text-sm font-semibold mb-2">Risk category mix</h3>
+      <p class="text-[11px] text-slate-600/85 mb-3">
+        Shows how often each risk band appears across your simulations.
+      </p>
+      <div class="h-56">
+        <canvas id="riskPieChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="rounded-3xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.1fr)] gap-4"
+  >
+    <div>
+      <h3 class="text-sm font-semibold mb-2">Profile snapshot</h3>
+      <p class="text-[11px] text-slate-600/85 mb-3">
+        Radar view of your typical profile: CIBIL, affordability, and leverage indicators combined
+        into a single shape.
+      </p>
+      <div class="h-56">
+        <canvas id="profileRadarChart"></canvas>
+      </div>
+    </div>
+    <div class="text-[11px] text-slate-600/90 space-y-2">
+      <h3 class="text-xs font-semibold text-slate-900 mb-1">Trend highlights</h3>
+      <p id="trend_cibil"></p>
+      <p id="trend_aai"></p>
+      <p id="trend_risk"></p>
+      <p class="text-slate-500/90 mt-1">
+        These trends compare your earliest and most recent simulations to show whether you are
+        moving towards safer, stronger profiles or taking on more risk over time.
+      </p>
+    </div>
+  </div>
+
+  <div class="grid lg:grid-cols-2 gap-4">
+    <div
+      class="rounded-3xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm"
+    >
+      <h3 class="text-sm font-semibold mb-2">Loan type distribution</h3>
+      <p class="text-[11px] text-slate-600/85 mb-3">
+        Compares how many times you simulated Home, Car, Personal, and Education loans.
+      </p>
+      <div class="h-56">
+        <canvas id="loanTypeBarChart"></canvas>
+      </div>
+    </div>
+
+    <div
+      class="rounded-3xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm"
+    >
+      <h3 class="text-sm font-semibold mb-2">Income vs requested loan</h3>
+      <p class="text-[11px] text-slate-600/85 mb-3">
+        Scatter view of annual income versus requested loan amount for your simulations.
+      </p>
+      <div class="h-56">
+        <canvas id="incomeLoanScatter"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script id="analytics-data" type="application/json">
+    {{ analytics | tojson }}
+  </script>
+  <script>
+    const analyticsData = JSON.parse(document.getElementById('analytics-data').textContent);
+  </script>
+</section>
+{% endblock %}
+

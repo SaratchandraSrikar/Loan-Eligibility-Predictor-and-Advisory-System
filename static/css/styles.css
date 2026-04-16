@@ -1,0 +1,104 @@
+h1, h2, h3, h4 {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Subtle background (professional, minimal) */
+.background-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(900px 500px at 15% 10%, rgba(56, 189, 248, 0.18), transparent 55%),
+    radial-gradient(900px 500px at 85% 20%, rgba(59, 130, 246, 0.12), transparent 55%),
+    linear-gradient(180deg, rgba(248, 250, 252, 1), rgba(255, 255, 255, 1));
+  opacity: 1;
+  filter: none;
+}
+
+/* Form and inputs */
+.form-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(100, 116, 139, 0.95);
+  margin-bottom: 0.25rem;
+}
+
+.form-input {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(226, 232, 240, 1);
+  background-color: rgba(255, 255, 255, 1);
+  padding: 0.6rem 0.75rem;
+  font-size: 0.8rem;
+  color: #0f172a;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.form-input:focus {
+  border-color: rgba(56, 189, 248, 0.95);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+}
+
+.form-input::placeholder {
+  color: rgba(148, 163, 184, 1);
+}
+
+.input-prefix {
+  position: absolute;
+  inset-inline-start: 0.75rem;
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: rgba(100, 116, 139, 1);
+}
+
+/* Metric cards */
+.metric-card {
+  border-radius: 1.2rem;
+  border: 1px solid rgba(226, 232, 240, 1);
+  background: rgba(255, 255, 255, 0.92);
+  padding: 0.8rem 0.85rem;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+  transform-origin: center;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(203, 213, 225, 1);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+}
+
+.metric-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(15, 23, 42, 0.55);
+  margin-bottom: 0.25rem;
+}
+
+.metric-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.metric-subtext {
+  font-size: 0.7rem;
+  color: rgba(15, 23, 42, 0.6);
+  margin-top: 0.15rem;
+}
+
+/* Simple fade/slide animation hook */
+[data-animate='true'] {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+[data-animate='true'].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
