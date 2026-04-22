@@ -32,7 +32,7 @@
             <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
               <i class="fa-regular fa-clock"></i> {{ app.created_at.strftime('%b %d, %Y - %H:%M') if app.created_at else 'Unknown Date' }}
             </span>
-            {% if app.loan_status == "Approved" %}
+            {% if app.loan_status and app.loan_status.strip() in ["Yes", "Approved", "Eligible"] %}
             <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider bg-emerald-100/80 text-emerald-700">Approved</span>
             {% else %}
             <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider bg-rose-100/80 text-rose-700">Rejected</span>
