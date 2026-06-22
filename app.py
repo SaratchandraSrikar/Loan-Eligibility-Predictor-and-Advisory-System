@@ -16,7 +16,10 @@ BASE_DIR = os.path.dirname(__file__)
 DB_PATH = os.path.join(BASE_DIR, "loan_app.db")
 
 # Automatically switch to Cloud Database if detecting Render Environment Variable
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", f"sqlite:///{DB_PATH}")
+db_url = os.environ.get("DATABASE_URL", f"sqlite:///{DB_PATH}")
+if db_url and db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql://", 1)
+app.config["SQLALCHEMY_DATABASE_URI"] = db_url
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
