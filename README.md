@@ -23,7 +23,7 @@ A Flask web application for predicting loan eligibility using machine learning m
    python app.py
    ```
 
-The app will be available at http://127.0.0.1:5001
+The app will be available at (https://loan-eligibility-predictor-and-advisory.onrender.com)
 
 ## Features
 
